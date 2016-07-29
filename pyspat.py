@@ -10,7 +10,7 @@ def read_coda(index, chain_1, chain_2, thin_factor=None, use_vars=None):
         single_chain=pd.DataFrame(index=coda.iteration.unique())
         single_chain.index.name='iteration'
         for i,var in index_df.iterrows():
-            z=coda.loc[var['start']:var['end']].set_index('iteration')['value']
+            z=coda.loc[var['start']-1:var['end']-1].set_index('iteration')['value']
             z.name=i
             single_chain=single_chain.join(z)
         if thin_factor:
@@ -20,9 +20,6 @@ def read_coda(index, chain_1, chain_2, thin_factor=None, use_vars=None):
         posteriors=posteriors.append(single_chain)
     posteriors=posteriors.sortlevel(level=['iteration','chain'])
     return posteriors
-
-
-
 
 
 

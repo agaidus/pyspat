@@ -22,7 +22,11 @@ def read_coda(index, chain_1, chain_2, thin_factor=None, use_vars=None):
     return posteriors
 
 
-
+def calc_coda_autocorrelation(coda):
+    def col_corr(x):
+         return pd.concat([x, x.shift()],1).corr().iloc[0,1]
+    ind_chain=pd.concat([coda[var].groupby(level='chain').apply(col_corr) for var in coda.columns],1)
+    return ind_chain.mean()
 
 
 
